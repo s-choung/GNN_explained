@@ -5,10 +5,20 @@
 	import { theme } from '$lib/stores/theme';
 	import { base } from '$app/paths';
 	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
+	import SankeyDiagram from '$lib/components/SankeyDiagram.svelte';
 
 	let data: CgcnnData | null = $state(null);
 	let loaded = $state(false);
 	let currentTheme = $state<'dark' | 'light'>('dark');
+	let activeModel = $state('cgcnn');
+	let activeView = $state<'architecture' | 'sankey'>('architecture');
+
+	const models = [
+		{ id: 'cgcnn', label: 'CGCNN', enabled: true },
+		{ id: 'nequip', label: 'NequIP', enabled: false },
+		{ id: 'mace', label: 'MACE', enabled: false },
+		{ id: 'equiformer', label: 'Equiformer', enabled: false },
+	];
 
 	theme.subscribe((v) => { currentTheme = v; });
 
@@ -31,10 +41,6 @@
 					<h1 class="text-base font-bold tracking-tight" style="font-family:'JetBrains Mono',monospace; color: var(--text)">
 						GNN<span style="color: var(--accent)">_</span>Explainer
 					</h1>
-					<div class="h-4 w-px" style="background: var(--border2)"></div>
-					<span class="rounded px-2 py-0.5 text-[10px] font-bold tracking-widest" style="font-family:'JetBrains Mono',monospace; background: rgba(56,189,248,0.12); color: var(--accent)">
-						CGCNN
-					</span>
 				</div>
 				<div class="flex items-center gap-3">
 					{#if data}
@@ -68,16 +74,62 @@
 
 	{#if data}
 		<main class="main-content">
+			<!-- Model selector + View toggle bar -->
+			<div class="toolbar">
+				<!-- Model tabs -->
+				<div class="model-tabs">
+					{#each models as model}
+						{#if model.enabled}
+							<button class="model-tab" class:model-tab-active={activeModel === model.id}
+								onclick={() => { activeModel = model.id; }}>
+								{model.label}
+							</button>
+						{:else}
+							<button class="model-tab model-tab-disabled" disabled title="Coming soon">
+								{model.label}
+								<span class="coming-soon">soon</span>
+							</button>
+						{/if}
+					{/each}
+				</div>
+
+				<!-- View toggle -->
+				<div class="view-toggle">
+					<button class="view-btn" class:view-btn-active={activeView === 'architecture'}
+						onclick={() => { activeView = 'architecture'; }}>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+						</svg>
+						Architecture
+					</button>
+					<button class="view-btn" class:view-btn-active={activeView === 'sankey'}
+						onclick={() => { activeView = 'sankey'; }}>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M3 3v18M21 3v18M3 12h18M3 6h9M12 6v12M3 18h9"/>
+						</svg>
+						Sankey
+					</button>
+				</div>
+			</div>
+
 			<!-- Subtle instruction -->
-			<div class="px-6 py-1.5 text-center">
+			<div class="px-6 py-1 text-center">
 				<p class="text-[10px]" style="color: var(--text3)">
-					Click layers to inspect &middot; Hover atoms for cross-highlighting
+					{#if activeView === 'architecture'}
+						Click layers to inspect &middot; Hover atoms for cross-highlighting
+					{:else}
+						Hover nodes to trace data flow through the network
+					{/if}
 				</p>
 			</div>
 
-			<!-- Main Architecture Diagram -->
+			<!-- Main content -->
 			<div class="page-enter" class:page-visible={loaded}>
-				<ArchitectureDiagram {data} />
+				{#if activeView === 'architecture'}
+					<ArchitectureDiagram {data} />
+				{:else}
+					<SankeyDiagram {data} />
+				{/if}
 			</div>
 		</main>
 
@@ -120,6 +172,89 @@
 	.main-content {
 		flex: 1;
 	}
+
+	/* ===== TOOLBAR ===== */
+	.toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		padding: 8px 24px;
+		flex-wrap: wrap;
+	}
+	.model-tabs {
+		display: flex;
+		gap: 2px;
+		padding: 3px;
+		border-radius: 8px;
+		background: var(--surface2);
+		border: 1px solid var(--border);
+	}
+	.model-tab {
+		font: 600 11px/1 'JetBrains Mono', monospace;
+		padding: 6px 14px;
+		border-radius: 6px;
+		border: none;
+		background: transparent;
+		color: var(--text3);
+		cursor: pointer;
+		transition: all 0.2s;
+		letter-spacing: 0.3px;
+	}
+	.model-tab:hover:not(:disabled) {
+		color: var(--text);
+		background: var(--layer-bg);
+	}
+	.model-tab-active {
+		background: var(--accent) !important;
+		color: #0f172a !important;
+	}
+	.model-tab-disabled {
+		opacity: 0.45;
+		cursor: not-allowed !important;
+		position: relative;
+	}
+	.coming-soon {
+		font-size: 7px;
+		font-weight: 400;
+		color: var(--text4);
+		margin-left: 3px;
+		font-style: italic;
+		letter-spacing: 0;
+	}
+
+	/* ===== VIEW TOGGLE ===== */
+	.view-toggle {
+		display: flex;
+		gap: 2px;
+		padding: 3px;
+		border-radius: 8px;
+		background: var(--surface2);
+		border: 1px solid var(--border);
+	}
+	.view-btn {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		font: 500 10px/1 'JetBrains Mono', monospace;
+		padding: 5px 10px;
+		border-radius: 5px;
+		border: none;
+		background: transparent;
+		color: var(--text3);
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	.view-btn:hover {
+		color: var(--text);
+		background: var(--layer-bg);
+	}
+	.view-btn-active {
+		background: var(--layer-hover-bg) !important;
+		color: var(--accent) !important;
+		box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+	}
+
 	.footer {
 		border-top: 1px solid var(--border);
 		padding: 12px 24px;

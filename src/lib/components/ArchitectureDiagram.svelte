@@ -32,6 +32,11 @@
 	function drawUnitCell(svgEl: SVGSVGElement, size: number) {
 		const svg = d3.select(svgEl);
 		svg.selectAll('*').remove();
+		const cs = getComputedStyle(document.documentElement);
+		const wireColor = cs.getPropertyValue('--wire').trim();
+		const borderColor = cs.getPropertyValue('--border').trim();
+		const border2Color = cs.getPropertyValue('--border2').trim();
+		const nodeLabelColor = cs.getPropertyValue('--node-label').trim();
 		const a = data.crystal.lattice.a;
 		const b = data.crystal.lattice.b;
 		const c = data.crystal.lattice.c;
@@ -49,7 +54,7 @@
 			svg.append('line')
 				.attr('x1', projected[i][0]).attr('y1', projected[i][1])
 				.attr('x2', projected[j][0]).attr('y2', projected[j][1])
-				.attr('stroke', '#334155').attr('stroke-width', 1).attr('stroke-dasharray', '3,2')
+				.attr('stroke', borderColor).attr('stroke-width', 1).attr('stroke-dasharray', '3,2')
 				.attr('stroke-opacity', 0.4);
 		});
 
@@ -61,14 +66,14 @@
 			svg.append('line')
 				.attr('x1', projected[i][0]).attr('y1', projected[i][1])
 				.attr('x2', projected[j][0]).attr('y2', projected[j][1])
-				.attr('stroke', '#475569').attr('stroke-width', 1).attr('stroke-opacity', 0.6);
+				.attr('stroke', border2Color).attr('stroke-width', 1).attr('stroke-opacity', 0.6);
 		});
 		// remaining edges
 		[[4,7]].forEach(([i,j]) => {
 			svg.append('line')
 				.attr('x1', projected[i][0]).attr('y1', projected[i][1])
 				.attr('x2', projected[j][0]).attr('y2', projected[j][1])
-				.attr('stroke', '#334155').attr('stroke-width', 1).attr('stroke-dasharray', '3,2')
+				.attr('stroke', borderColor).attr('stroke-width', 1).attr('stroke-dasharray', '3,2')
 				.attr('stroke-opacity', 0.4);
 		});
 
@@ -115,14 +120,14 @@
 				.attr('cx', px).attr('cy', py).attr('r', r)
 				.attr('fill', color)
 				.attr('opacity', img.ghost ? 0.25 : 0.9)
-				.attr('stroke', img.ghost ? 'none' : '#0f172a')
+				.attr('stroke', img.ghost ? 'none' : nodeLabelColor)
 				.attr('stroke-width', img.ghost ? 0 : 1);
 
 			if (!img.ghost) {
 				svg.append('text')
 					.attr('x', px).attr('y', py + 1)
 					.attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
-					.attr('fill', '#0f172a').attr('font-size', '7px').attr('font-weight', '700')
+					.attr('fill', nodeLabelColor).attr('font-size', '7px').attr('font-weight', '700')
 					.attr('pointer-events', 'none').text(img.element);
 			}
 		});
@@ -162,6 +167,10 @@
 	) {
 		const svg = d3.select(svgEl);
 		svg.selectAll('*').remove();
+		const cs = getComputedStyle(document.documentElement);
+		const mgWireColor = cs.getPropertyValue('--wire').trim();
+		const mgBorder2Color = cs.getPropertyValue('--border2').trim();
+		const mgNodeLabelColor = cs.getPropertyValue('--node-label').trim();
 		const atoms = data.crystal.atoms;
 		const bonds = data.crystal.bonds;
 		const pos = graphPositions(atoms.length, w / 2, h / 2, Math.min(w, h) * 0.32);
@@ -170,7 +179,7 @@
 			svg.append('line')
 				.attr('x1', pos[bond.source].x).attr('y1', pos[bond.source].y)
 				.attr('x2', pos[bond.target].x).attr('y2', pos[bond.target].y)
-				.attr('stroke', '#475569').attr('stroke-width', 1.2).attr('stroke-opacity', 0.4);
+				.attr('stroke', mgBorder2Color).attr('stroke-width', 1.2).attr('stroke-opacity', 0.4);
 		});
 
 		atoms.forEach((atom, i) => {
@@ -191,11 +200,11 @@
 
 			svg.append('circle').attr('cx', p.x).attr('cy', p.y).attr('r', r)
 				.attr('fill', elementColors[atom.element] || '#94a3b8')
-				.attr('stroke', '#0f172a').attr('stroke-width', 1);
+				.attr('stroke', mgNodeLabelColor).attr('stroke-width', 1);
 
 			svg.append('text').attr('x', p.x).attr('y', p.y + 0.5)
 				.attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
-				.attr('fill', '#0f172a').attr('font-size', '7px').attr('font-weight', '700')
+				.attr('fill', mgNodeLabelColor).attr('font-size', '7px').attr('font-weight', '700')
 				.attr('pointer-events', 'none').text(atom.element);
 		});
 	}
@@ -377,10 +386,10 @@
 									<svg width="24" height="50" viewBox="0 0 24 50">
 										{#each [12, 25, 38] as y1}
 											{#each [12, 25, 38] as y2}
-												<line x1="0" y1={y1} x2="24" y2={y2} stroke="#1e293b" stroke-width="0.5"/>
+												<line x1="0" y1={y1} x2="24" y2={y2} style="stroke: var(--wire)" stroke-width="0.5"/>
 											{/each}
 										{/each}
-										<circle r="2" fill="#38bdf8" opacity="0.7">
+										<circle r="2" style="fill: var(--accent)" opacity="0.7">
 											<animateMotion dur="1.5s" repeatCount="indefinite" path="M0,25 L24,25"/>
 										</circle>
 									</svg>
@@ -439,7 +448,7 @@
 						<svg class="pool-funnel" viewBox="0 0 140 40" width="140" height="40">
 							{#each data.crystal.atoms as _, i}
 								<line x1={15 + i * 27} y1="2" x2="70" y2="36"
-									stroke="#475569" stroke-width="1" stroke-dasharray="3,2" class="f-line" style="--d:{i*0.1}s"/>
+									stroke-width="1" stroke-dasharray="3,2" class="f-line" style="stroke: var(--border2); --d:{i*0.1}s"/>
 								<circle r="1.5" fill="{data.crystal.atoms[i].color}" opacity="0.6">
 									<animateMotion dur="{1.5 + i * 0.2}s" repeatCount="indefinite"
 										path="M{15 + i * 27},2 L70,36"/>
@@ -487,24 +496,24 @@
 					</div>
 					<svg class="nn-svg" width="110" height="100" viewBox="0 0 110 100">
 						{#each [18, 33, 48, 63, 78] as y, i}
-							<circle cx="12" cy={y} r="3.5" fill="#64748b" class="nn-node" style="--d:{0.5+i*0.04}s"/>
+							<circle cx="12" cy={y} r="3.5" class="nn-node" style="fill: var(--border2); --d:{0.5+i*0.04}s"/>
 						{/each}
-						<text x="12" y="94" text-anchor="middle" fill="#475569" font-size="7">64</text>
+						<text x="12" y="94" text-anchor="middle" style="fill: var(--text4)" font-size="7">64</text>
 						{#each [18, 33, 48, 63, 78] as y1}
 							{#each [10, 22, 34, 46, 58, 70, 82] as y2}
-								<line x1="16" y1={y1} x2="51" y2={y2} stroke="#1e293b" stroke-width="0.35"/>
+								<line x1="16" y1={y1} x2="51" y2={y2} style="stroke: var(--wire)" stroke-width="0.35"/>
 							{/each}
 						{/each}
 						{#each [10, 22, 34, 46, 58, 70, 82] as y, i}
 							<circle cx="55" cy={y} r="3" fill="#3b82f6" class="nn-node" style="--d:{0.6+i*0.03}s"/>
 						{/each}
-						<text x="55" y="94" text-anchor="middle" fill="#475569" font-size="7">128</text>
+						<text x="55" y="94" text-anchor="middle" style="fill: var(--text4)" font-size="7">128</text>
 						{#each [10, 22, 34, 46, 58, 70, 82] as y2}
-							<line x1="58" y1={y2} x2="93" y2="46" stroke="#1e293b" stroke-width="0.35"/>
+							<line x1="58" y1={y2} x2="93" y2="46" style="stroke: var(--wire)" stroke-width="0.35"/>
 						{/each}
-						<circle cx="97" cy="46" r="5.5" fill="#0f172a" stroke="#34d399" stroke-width="1.5" class="nn-out"/>
+						<circle cx="97" cy="46" r="5.5" stroke="#34d399" stroke-width="1.5" class="nn-out" style="fill: var(--bg1, #0f172a)"/>
 						<text x="97" y="49" text-anchor="middle" fill="#34d399" font-size="8" font-weight="bold">E</text>
-						<circle r="2" fill="#38bdf8" opacity="0.7">
+						<circle r="2" style="fill: var(--accent)" opacity="0.7">
 							<animateMotion dur="2s" repeatCount="indefinite" path="M12,48 L55,48 L97,46"/>
 						</circle>
 					</svg>
