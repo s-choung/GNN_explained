@@ -3,6 +3,7 @@
 	import { modelData } from '$lib/stores/modelData';
 	import type { CgcnnData } from '$lib/stores/modelData';
 	import { theme } from '$lib/stores/theme';
+	import { base } from '$app/paths';
 	import ArchitectureDiagram from '$lib/components/ArchitectureDiagram.svelte';
 
 	let data: CgcnnData | null = $state(null);
@@ -13,7 +14,7 @@
 
 	onMount(async () => {
 		theme.init();
-		const res = await fetch('/data/cgcnn_placeholder.json');
+		const res = await fetch(`${base}/data/cgcnn_placeholder.json`);
 		const json: CgcnnData = await res.json();
 		data = json;
 		modelData.set(json);
