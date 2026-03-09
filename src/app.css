@@ -1,0 +1,75 @@
+@import 'tailwindcss';
+
+/* ===== DARK THEME (default) ===== */
+:root,
+[data-theme="dark"] {
+	--bg: #0a0f1a;
+	--bg2: #0f172a;
+	--surface: #1e293b;
+	--surface2: rgba(10,15,26,0.8);
+	--border: #1e293b;
+	--border2: #334155;
+	--text: #e2e8f0;
+	--text2: #94a3b8;
+	--text3: #64748b;
+	--text4: #475569;
+	--text5: #334155;
+	--accent: #38bdf8;
+	--energy: #34d399;
+	--energy-bg: rgba(6,78,59,0.35);
+	--energy-glow: rgba(52,211,153,0.12);
+	--frame-bg: linear-gradient(145deg, rgba(10,15,26,0.97), rgba(20,30,50,0.85));
+	--frame-border: #1e293b;
+	--layer-bg: rgba(10,15,26,0.8);
+	--layer-hover-bg: rgba(20,30,50,0.95);
+	--conn-line: linear-gradient(90deg, #1e293b, #334155, #1e293b);
+	--wire: #1e293b;
+	--node-label: #0f172a;
+	--conv-bg: rgba(30,58,95,0.08);
+	--conv-border: #1e293b;
+	--detail-bg: rgba(10,15,26,0.97);
+	--chip-bg: rgba(30,41,59,0.5);
+	--nn-title-bg: #0a0f1a;
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+	--bg: #f8fafc;
+	--bg2: #f1f5f9;
+	--surface: #e2e8f0;
+	--surface2: rgba(255,255,255,0.9);
+	--border: #cbd5e1;
+	--border2: #94a3b8;
+	--text: #0f172a;
+	--text2: #334155;
+	--text3: #475569;
+	--text4: #64748b;
+	--text5: #94a3b8;
+	--accent: #0284c7;
+	--energy: #059669;
+	--energy-bg: rgba(209,250,229,0.6);
+	--energy-glow: rgba(16,185,129,0.15);
+	--frame-bg: linear-gradient(145deg, rgba(241,245,249,0.98), rgba(226,232,240,0.9));
+	--frame-border: #cbd5e1;
+	--layer-bg: rgba(255,255,255,0.85);
+	--layer-hover-bg: rgba(241,245,249,0.98);
+	--conn-line: linear-gradient(90deg, #cbd5e1, #94a3b8, #cbd5e1);
+	--wire: #cbd5e1;
+	--node-label: #1e293b;
+	--conv-bg: rgba(219,234,254,0.3);
+	--conv-border: #bfdbfe;
+	--detail-bg: rgba(255,255,255,0.97);
+	--chip-bg: rgba(226,232,240,0.6);
+	--nn-title-bg: #f8fafc;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--bg);
+	color: var(--text);
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+	transition: background-color 0.3s, color 0.3s;
+}
