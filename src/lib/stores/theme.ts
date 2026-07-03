@@ -5,8 +5,8 @@ type Theme = 'dark' | 'light';
 
 function createThemeStore() {
 	const initial: Theme = browser
-		? (localStorage.getItem('gnn-theme') as Theme) || 'dark'
-		: 'dark';
+		? (localStorage.getItem('gnn-theme') as Theme) || 'light'
+		: 'light';
 
 	const { subscribe, set, update } = writable<Theme>(initial);
 
@@ -25,7 +25,7 @@ function createThemeStore() {
 		init() {
 			if (browser) {
 				const saved = localStorage.getItem('gnn-theme') as Theme | null;
-				const theme = saved || 'dark';
+				const theme = saved || 'light';
 				set(theme);
 				document.documentElement.setAttribute('data-theme', theme);
 			}

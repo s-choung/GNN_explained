@@ -14,7 +14,9 @@ export const elementColors: Record<string, string> = {
 	H: '#fafafa',
 	N: '#60a5fa',
 	Fe: '#fb923c',
-	Si: '#a78bfa'
+	Si: '#a78bfa',
+	Na: '#c084fc',
+	Cl: '#4ade80'
 };
 
 export const elementRadii: Record<string, number> = {
@@ -25,5 +27,7 @@ export const elementRadii: Record<string, number> = {
 	H: 8,
 	N: 12,
 	Fe: 16,
-	Si: 16
+	Si: 16,
+	Na: 16,
+	Cl: 14
 };

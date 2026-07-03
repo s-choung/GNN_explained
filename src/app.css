@@ -1,66 +1,69 @@
 @import 'tailwindcss';
 
-/* ===== DARK THEME (default) ===== */
+/* ============================================================
+   OpenAI-style design tokens
+   Achromatic UI: black + graphite + fog border on pure white.
+   Color enters only through data (atoms, feature heatmaps).
+   Radii: 9999px (pill) for interactive, 6.08px for cards.
+   ============================================================ */
+
+/* ===== LIGHT THEME (default) ===== */
 :root,
-[data-theme="dark"] {
-	--bg: #0a0f1a;
-	--bg2: #0f172a;
-	--surface: #1e293b;
-	--surface2: rgba(10,15,26,0.8);
-	--border: #1e293b;
-	--border2: #334155;
-	--text: #e2e8f0;
-	--text2: #94a3b8;
-	--text3: #64748b;
-	--text4: #475569;
-	--text5: #334155;
-	--accent: #38bdf8;
-	--energy: #34d399;
-	--energy-bg: rgba(6,78,59,0.35);
-	--energy-glow: rgba(52,211,153,0.12);
-	--frame-bg: linear-gradient(145deg, rgba(10,15,26,0.97), rgba(20,30,50,0.85));
-	--frame-border: #1e293b;
-	--layer-bg: rgba(10,15,26,0.8);
-	--layer-hover-bg: rgba(20,30,50,0.95);
-	--conn-line: linear-gradient(90deg, #1e293b, #334155, #1e293b);
-	--wire: #1e293b;
-	--node-label: #0f172a;
-	--conv-bg: rgba(30,58,95,0.08);
-	--conv-border: #1e293b;
-	--detail-bg: rgba(10,15,26,0.97);
-	--chip-bg: rgba(30,41,59,0.5);
-	--nn-title-bg: #0a0f1a;
+[data-theme="light"] {
+	--bg: #ffffff;
+	--bg2: #f7f7f8;
+	--surface: #ececec;
+	--surface2: rgba(0, 0, 0, 0.04);
+	--border: #e5e7eb;
+	--border2: rgba(0, 0, 0, 0.12);
+	--text: #000000;
+	--text2: #666666;
+	--text3: #666666;
+	--text4: #666666;
+	--text5: #8f8f8f;
+	--accent: #000000;
+	--energy: #000000;
+	--energy-bg: rgba(0, 0, 0, 0.04);
+	--layer-bg: rgba(0, 0, 0, 0.03);
+	--layer-hover-bg: rgba(0, 0, 0, 0.06);
+	--layer-active-bg: rgba(0, 0, 0, 0.09);
+	--conn-line: #e5e7eb;
+	--wire: #d6d6d6;
+	--node-label: #111111;
+	--conv-bg: rgba(0, 0, 0, 0.025);
+	--detail-bg: rgba(0, 0, 0, 0.03);
+	--chip-bg: rgba(0, 0, 0, 0.05);
+	--radius-card: 6.08px;
+	--radius-soft: 40px;
+	--radius-pill: 9999px;
+	--shadow-sm: rgba(0, 0, 0, 0.02) 0px 4px 6px 0px, rgba(0, 0, 0, 0.05) 0px 0px 2px 0px;
 }
 
-/* ===== LIGHT THEME ===== */
-[data-theme="light"] {
-	--bg: #f8fafc;
-	--bg2: #f1f5f9;
-	--surface: #e2e8f0;
-	--surface2: rgba(255,255,255,0.9);
-	--border: #cbd5e1;
-	--border2: #94a3b8;
-	--text: #0f172a;
-	--text2: #334155;
-	--text3: #475569;
-	--text4: #64748b;
-	--text5: #94a3b8;
-	--accent: #0284c7;
-	--energy: #059669;
-	--energy-bg: rgba(209,250,229,0.6);
-	--energy-glow: rgba(16,185,129,0.15);
-	--frame-bg: linear-gradient(145deg, rgba(241,245,249,0.98), rgba(226,232,240,0.9));
-	--frame-border: #cbd5e1;
-	--layer-bg: rgba(255,255,255,0.85);
-	--layer-hover-bg: rgba(241,245,249,0.98);
-	--conn-line: linear-gradient(90deg, #cbd5e1, #94a3b8, #cbd5e1);
-	--wire: #cbd5e1;
-	--node-label: #1e293b;
-	--conv-bg: rgba(219,234,254,0.3);
-	--conv-border: #bfdbfe;
-	--detail-bg: rgba(255,255,255,0.97);
-	--chip-bg: rgba(226,232,240,0.6);
-	--nn-title-bg: #f8fafc;
+/* ===== DARK THEME (achromatic inverse) ===== */
+[data-theme="dark"] {
+	--bg: #0d0d0d;
+	--bg2: #171717;
+	--surface: #2e2e2e;
+	--surface2: rgba(255, 255, 255, 0.07);
+	--border: #262626;
+	--border2: rgba(255, 255, 255, 0.18);
+	--text: #f2f2f2;
+	--text2: #b3b3b3;
+	--text3: #b3b3b3;
+	--text4: #b3b3b3;
+	--text5: #7d7d7d;
+	--accent: #f2f2f2;
+	--energy: #f2f2f2;
+	--energy-bg: rgba(255, 255, 255, 0.06);
+	--layer-bg: rgba(255, 255, 255, 0.045);
+	--layer-hover-bg: rgba(255, 255, 255, 0.08);
+	--layer-active-bg: rgba(255, 255, 255, 0.12);
+	--conn-line: #2e2e2e;
+	--wire: #3d3d3d;
+	--node-label: #111111;
+	--conv-bg: rgba(255, 255, 255, 0.03);
+	--detail-bg: rgba(255, 255, 255, 0.05);
+	--chip-bg: rgba(255, 255, 255, 0.08);
 }
 
 html {
@@ -70,6 +73,11 @@ html {
 body {
 	background-color: var(--bg);
 	color: var(--text);
-	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+	font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-feature-settings: 'calt', 'liga';
+	-webkit-font-smoothing: antialiased;
+	word-break: keep-all;
+	line-break: strict;
+	overflow-wrap: break-word;
 	transition: background-color 0.3s, color 0.3s;
 }
